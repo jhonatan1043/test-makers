@@ -21,27 +21,37 @@ export function AuthProvider({ children }) {
         localStorage.getItem("userId")
     );
 
+    const [role, setRole] = useState(
+        localStorage.getItem("role")
+    );
+
     const email = token ? decodeToken(token)?.sub : null;
+
+    const isAdmin = role === "ADMIN";
 
     const login = (jwt) => {
         localStorage.setItem("token", jwt);
         setToken(jwt);
     };
 
-    const saveUserId = (id) => {
+    const saveUserData = (id, userRole) => {
         localStorage.setItem("userId", String(id));
+        localStorage.setItem("role", userRole);
         setUserId(String(id));
+        setRole(userRole);
     };
 
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("userId");
+        localStorage.removeItem("role");
         setToken(null);
         setUserId(null);
+        setRole(null);
     };
 
     return (
-        <AuthContext.Provider value={{ token, userId, email, login, saveUserId, logout }}>
+        <AuthContext.Provider value={{ token, userId, role, email, isAdmin, login, saveUserData, logout }}>
             {children}
         </AuthContext.Provider>
     );

@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Dashboard() {
 
     const navigate = useNavigate();
-    const { email, logout } = useAuth();
+    const { email, isAdmin, logout } = useAuth();
 
     const handleLogout = () => {
         logout();
@@ -16,7 +16,12 @@ export default function Dashboard() {
             <div className="dashboard-header">
                 <div>
                     <h1>Banco Loans</h1>
-                    <p className="subtitle">{email}</p>
+                    <p className="subtitle">
+                        {email} &nbsp;
+                        <span className={`badge ${isAdmin ? "badge-approved" : "badge-pending"}`}>
+                            {isAdmin ? "ADMIN" : "USUARIO"}
+                        </span>
+                    </p>
                 </div>
                 <button className="btn-logout" onClick={handleLogout}>
                     Cerrar sesión
@@ -29,7 +34,7 @@ export default function Dashboard() {
                 <div className="dashboard-card" onClick={() => navigate("/request-loan")}>
                     <div className="dashboard-card-icon">💰</div>
                     <h4>Solicitar Préstamo</h4>
-                    <p>Envía una nueva solicitud de préstamo indicando el monto y el plazo.</p>
+                    <p>Envía una nueva solicitud indicando el monto y el plazo.</p>
                 </div>
 
                 <div className="dashboard-card" onClick={() => navigate("/my-loans")}>
@@ -38,11 +43,13 @@ export default function Dashboard() {
                     <p>Consulta el estado de tus préstamos aprobados, rechazados o pendientes.</p>
                 </div>
 
-                <div className="dashboard-card admin-card" onClick={() => navigate("/admin")}>
-                    <div className="dashboard-card-icon">🔧</div>
-                    <h4>Panel Administrador</h4>
-                    <p>Aprueba o rechaza solicitudes de préstamo. Solo disponible para administradores.</p>
-                </div>
+                {isAdmin && (
+                    <div className="dashboard-card admin-card" onClick={() => navigate("/admin")}>
+                        <div className="dashboard-card-icon">🔧</div>
+                        <h4>Panel Administrador</h4>
+                        <p>Aprueba o rechaza solicitudes de préstamo de todos los usuarios.</p>
+                    </div>
+                )}
             </div>
         </div>
     );

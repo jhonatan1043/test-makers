@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Login() {
 
     const navigate = useNavigate();
-    const { login, saveUserId } = useAuth();
+    const { login, saveUserData } = useAuth();
 
     const [form, setForm] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
@@ -21,18 +21,16 @@ export default function Login() {
         setError("");
         setLoading(true);
         try {
-            // 1. login → obtener token
             const loginRes = await api.post("/auth/login", form);
             const token = loginRes.data.token;
 
-            // guardar token antes de llamar /me para que el interceptor lo envíe
             login(token);
 
-            // 2. obtener datos del usuario (id, role)
             const meRes = await api.get("/auth/me", {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            saveUserId(meRes.data.id);
+
+            saveUserData(meRes.data.id, meRes.data.role);
 
             navigate("/dashboard");
         } catch (err) {

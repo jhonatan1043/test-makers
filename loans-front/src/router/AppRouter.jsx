@@ -7,15 +7,26 @@ import Dashboard from "../pages/Dashboard";
 import RequestLoan from "../pages/RequestLoan";
 import MyLoans from "../pages/MyLoans";
 import AdminLoans from "../pages/AdminLoans";
+import Unauthorized from "../pages/Unauthorized";
 
-function PrivateRoute({ children }) {
-    const { token } = useAuth();
-    return token ? children : <Navigate to="/" />;
-}
-
+// Solo accesible si NO hay sesión activa
 function PublicRoute({ children }) {
     const { token } = useAuth();
-    return !token ? children : <Navigate to="/dashboard" />;
+    return !token ? children : <Navigate to="/dashboard" replace />;
+}
+
+// Requiere sesión activa
+function PrivateRoute({ children }) {
+    const { token } = useAuth();
+    return token ? children : <Navigate to="/" replace />;
+}
+
+// Requiere sesión activa + rol ADMIN
+function AdminRoute({ children }) {
+    const { token, isAdmin } = useAuth();
+    if (!token) return <Navigate to="/" replace />;
+    if (!isAdmin) return <Navigate to="/unauthorized" replace />;
+    return children;
 }
 
 export default function AppRouter() {
@@ -43,10 +54,14 @@ export default function AppRouter() {
                 } />
 
                 <Route path="/admin" element={
-                    <PrivateRoute><AdminLoans /></PrivateRoute>
+                    <AdminRoute><AdminLoans /></AdminRoute>
                 } />
 
-                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="/unauthorized" element={
+                    <PrivateRoute><Unauthorized /></PrivateRoute>
+                } />
+
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
     );
