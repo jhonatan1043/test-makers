@@ -1,0 +1,37 @@
+1. Optimización en sistemas financieros
+a. ¿Cómo mejorar rendimiento y escalabilidad?
+
+Para mejorar el rendimiento utilizaría procesamiento concurrente y asíncrono para atender varias operaciones al mismo tiempo. Implementaría Redis para almacenar información consultada frecuentemente y usaría pools de conexiones para optimizar el acceso a la base de datos. También emplearía una arquitectura de microservicios y patrones como CQRS y Circuit Breaker para lograr una mayor escalabilidad y disponibilidad.
+
+2. Seguridad en APIs financieras
+a. ¿Cómo proteger la API?
+
+Protegería la API utilizando consultas parametrizadas para evitar inyección SQL, validando las entradas para prevenir ataques XSS y usando JWT junto con OAuth2 para la autenticación. Toda la comunicación se realizaría mediante HTTPS y las contraseñas se almacenarían cifradas con BCrypt. Además, implementaría límites de peticiones y mecanismos de auditoría para registrar las operaciones importantes.
+
+3. Transacciones en sistemas distribuidos
+a. ¿Cómo garantizar consistencia?
+
+Utilizaría el patrón Saga para coordinar las operaciones entre diferentes servicios. Si ocurre un error durante una transferencia, se ejecutarían acciones de compensación para revertir los cambios realizados. También implementaría idempotencia para evitar operaciones duplicadas y herramientas de monitoreo para facilitar la trazabilidad.
+
+4. Pruebas unitarias y de integración
+a. ¿Cómo diseñar las pruebas?
+
+Diseñaría pruebas unitarias para validar la lógica de negocio de cada componente y usaría Mockito para simular dependencias. Para las pruebas de integración verificaría el funcionamiento completo de los controladores, servicios y la base de datos. Las herramientas principales serían JUnit 5, Mockito, Spring Boot Test, MockMvc y Testcontainers.
+
+5. Front-End
+a. Gestión del estado y autenticación
+
+Gestionaría el estado con herramientas como NgRx o Redux para mantener la información sincronizada. La autenticación la realizaría con JWT y protegería las rutas privadas para impedir accesos no autorizados. También utilizaría interceptores HTTP para enviar automáticamente el token en cada solicitud y mantener la coherencia de los datos.
+
+6. Spring Boot
+a. ¿Qué ocurre al usar @SpringBootApplication?
+
+Esta anotación combina @Configuration, @EnableAutoConfiguration y @ComponentScan. Cuando la aplicación inicia, Spring crea el contexto, detecta automáticamente los componentes y configura los elementos necesarios según las dependencias del proyecto.
+
+b. ¿Cómo funciona el ciclo de vida de un Bean?
+
+Spring crea el Bean, inyecta sus dependencias y ejecuta los métodos de inicialización. El Bean permanece disponible durante la ejecución de la aplicación y, al finalizar, se ejecutan los métodos de destrucción. Es posible intervenir en este proceso mediante @PostConstruct, @PreDestroy o implementando un BeanPostProcessor.
+
+c. ¿Cómo personalizar la auto-configuración?
+
+Personalizaría la configuración principalmente desde el archivo application.properties o definiendo Beans propios cuando sea necesario. También se pueden excluir configuraciones automáticas específicas, manteniendo siempre la filosofía de "convención sobre configuración" que caracteriza a Spring Boot.
